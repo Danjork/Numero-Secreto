@@ -1,65 +1,88 @@
-/**let titulo = document.querySelector('h1');
-titulo.innerHTML = 'Juego del numero secreto';
+let numeroSecreto = 0;
+let intentos = 0;
+let listaNumerosSorteados = [];
+let numeroMaximo = 10;
 
-let parrafo = document.querySelector('p');
-parrafo.innerHTML = "Ingresa un numero del 1 al 10";
-
-/*oneclick trabaja con funciones 
-
-*/
-let numeroSecreto = generaNumeroSecreto();
-console.log(numeroSecreto);
-
-let intentos = 1;
 
 function asignarTextoElemento(elemento, texto) {
     let elementoHTML = document.querySelector(elemento);
     elementoHTML.innerHTML = texto;
     return;
-};
+}
 
-function generaNumeroSecreto() {
-    return Math.floor(Math.random() * 10) + 1;
+function generarNumeroSecreto() {
+    let numeroGenerado =  Math.floor(Math.random()*numeroMaximo)+1;
 
+    console.log(numeroGenerado);
+    console.log(listaNumerosSorteados);
+    //Si ya sorteamos todos los números
+    if (listaNumerosSorteados.length == numeroMaximo) {
+        asignarTextoElemento('p','Ya se sortearon todos los números posibles');
+    } else {
+        //Si el numero generado está incluido en la lista 
+        if (listaNumerosSorteados.includes(numeroGenerado)) {
+            return generarNumeroSecreto();
+        } else {
+            listaNumerosSorteados.push(numeroGenerado);
+            return numeroGenerado;
+        }
+    }
 }
 
 /*capturamos el valor que el usuario ingreso en el input*/
 /* let numeroDeUsuario = document.querySelector('input');*/
 /* */
-function verificaIntento() {
-
+function verificarIntento() {
     let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
-console.log(intentos)
+    
     if (numeroDeUsuario === numeroSecreto) {
-        /*uso de operador ternario usar if else en una linea de codigo */
-        asignarTextoElemento('p', `acertaste el numero en ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`);
+        asignarTextoElemento('p',`Acertaste el número en ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`);
+        document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
-        //el usuario no acerto
-        if(numeroDeUsuario > numeroSecreto){
-            asignarTextoElemento('p', 'El numero secreto es menor');
-        } else{
-
-            asignarTextoElemento('p', 'El numero secreto es mayor');
+        //El usuario no acertó.
+        if (numeroDeUsuario > numeroSecreto) {
+            asignarTextoElemento('p','El número secreto es menor');
+        } else {
+            asignarTextoElemento('p','El número secreto es mayor');
         }
         intentos++;
         limpiarCaja();
-
     }
     return;
-};
+}
 
-function limpiarCaja(){
+function limpiarCaja() {
     /*reutilizar el elemento del id del input
-    let valorCaja = document.querySelector('#valorUsuario');
-    valorCaja.value=''; */
+      let valorCaja = document.querySelector('#valorUsuario');
+      valorCaja.value=''; */
 
     //resumido el codigo
-    document.querySelector('#valorUsuario').value = '';
-};
+    document.querySelector("#valorUsuario").value = "";
+}
 
+function condicionesIniciales() {
+    /*Encapsulacion el mensaje y el intervalo  */
+    /* ejemplo elemento = h1 o P o h2 ; texto = "hola mundo"*/
+    asignarTextoElemento('h1','Juego del número secreto!');
+    asignarTextoElemento('p',`Indica un número del 1 al ${numeroMaximo}`);
+    numeroSecreto = generarNumeroSecreto();
+    intentos = 1;
+    console.log(numeroSecreto);
+}
 
+function reiniciarJuego() {
+    //limpiar caja
+    limpiarCaja();
+    //Indicar mensaje de intervalo de números 
+    //Generar el número aleatorio
+    //Inicializar el número intentos
+    condicionesIniciales();
+    //Deshabilitar el botón de nuevo juego
+    document.querySelector('#reiniciar').setAttribute('disabled','true');
+    
+}
 
-/* ejemplo elemento = h1 o P o h2 ; texto = "hola mundo"*/
-asignarTextoElemento('h1', 'Juego del numero secreto');
-asignarTextoElemento('p', 'Indica un número del 1 al 10');
+//se tiene que llamar a la funcion para que funcione
+condicionesIniciales();
+
 
