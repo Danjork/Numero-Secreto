@@ -30,8 +30,7 @@ function generarNumeroSecreto() {
 }
 
 /*capturamos el valor que el usuario ingreso en el input*/
-/* let numeroDeUsuario = document.querySelector('input');*/
-/* */
+
 function verificarIntento() {
     let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
     
